@@ -24,6 +24,12 @@
     function sendMessage() {
         const message = document.getElementById("message");
         socket.emit('new_message', message.value);
+
+        let messages = document.createElement('div');
+        messages.innerText = message.value;
+        const textBox = document.getElementById('text_box');
+        textBox.append(messages);
+
         return false;
     }
 
@@ -34,13 +40,14 @@
     // })
 
     socket.on('new_message', (data) => {
+
         console.log('server says', data);
 
-        let li = document.createElement('li');
-        li.innerHTML = data;
+        let messages = document.createElement('div');
+        messages.innerText = data;
+        const textBox = document.getElementById('text_box');
+        textBox.append(messages);
 
-        let messages = document.getElementById('messages');
-        messages.appendChild(li);
     })
 
 </script>
@@ -63,13 +70,21 @@
         padding: 0.5rem;
         overflow: scroll;
     }
+    #user_form {
+        margin-left: 1rem;
+    }
 </style>
 
 <body>
-    <div>
+    <div id="user_form">
         <form onsubmit="return joinRoom();">
-            <input id="user_name" placeholder="Enter name">
-            <input type="submit" value="Send">
+            <select id="user_name">
+                <option value="user001">user001</option>
+                <option value="user002">user002</option>
+                <option value="user003">user003</option>
+                <option value="user004">user004</option>
+                <input type="submit" value="Choose">
+            </select>
         </form>
     </div>
     <div id="text_box"></div>
