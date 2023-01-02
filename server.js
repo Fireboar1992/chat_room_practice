@@ -21,12 +21,22 @@ const io = new Server(server, {
 });
 
 io.on('connection', (socket)=>{
-    console.log('user connect', socket.id);
+
+    console.log('socket-id: ', socket.id);
+
+    socket.on('user_join', (userName)=>{
+        console.log('user_name', userName);
+        io.emit('user_join', `${userName} join the room`);
+    })
 
     socket.on('new_message', (message)=>{
         console.log('client says', message);
         io.emit('new_message', 'Yes client ?');
     }) 
+
+    // socket.on('disconnect', ()=>{
+    //     console.log('user disconnected');
+    // });
 
 })
 

@@ -1,19 +1,29 @@
-<script src="https://cdn.socket.io/3.1.3/socket.io.min.js" integrity="sha384-cPwlPLvBTa3sKAgddT6krw0cJat7egBga3DJepJyrLl4Q9/5WLra3rrnMcyTyOnh" crossorigin="anonymous"></script>
+<!DOCTYPE html>
+<html>
 
-<form onsubmit="return sendMessage();">
-     <input id="message" placeholder="Enter message">
-     <input type="submit" value ="Send">
-</form>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="" viewpoint content="width=device-width, initial-scale=1.0" />
+    <title>chat room 1.0</title>
+</head>
 
-<ul id="messages"></ul>
+<script src="https://cdn.socket.io/3.1.3/socket.io.min.js"
+    integrity="sha384-cPwlPLvBTa3sKAgddT6krw0cJat7egBga3DJepJyrLl4Q9/5WLra3rrnMcyTyOnh"
+    crossorigin="anonymous"></script>
 
 <script>
 
     const socket = io('http://localhost:3000');
- 
-    function sendMessage(){
+
+    function joinRoom() {
+        const userName = document.getElementById("user_name");
+        socket.emit('user_join', userName.value);
+        return false;
+    }
+
+    function sendMessage() {
         const message = document.getElementById("message");
-        socket.emit('new_message', message.value); 
+        socket.emit('new_message', message.value);
         return false;
     }
 
@@ -22,15 +32,55 @@
     //     console.log(data);
     //     // console.log('server says', data);
     // })
-    
-    socket.on('new_message', (data)=>{
-        console.log('server says', data); 
+
+    socket.on('new_message', (data) => {
+        console.log('server says', data);
 
         let li = document.createElement('li');
         li.innerHTML = data;
-  
+
         let messages = document.getElementById('messages');
         messages.appendChild(li);
     })
 
 </script>
+
+<style>
+    .center {
+        text-align: center;
+        margin: 0 auto;
+    }
+    #send_msg {
+        text-align: center;
+        width: 100%;
+        position: absolute;
+    }
+    #text_box {
+        height: 75vh;
+        border: 1px solid #000000;
+        border-radius: 10px;
+        margin: 1rem 1rem;
+        padding: 0.5rem;
+        overflow: scroll;
+    }
+</style>
+
+<body>
+    <div>
+        <form onsubmit="return joinRoom();">
+            <input id="user_name" placeholder="Enter name">
+            <input type="submit" value="Send">
+        </form>
+    </div>
+    <div id="text_box"></div>
+    <div class="center">
+        <form id="send_msg" onsubmit="return sendMessage();">
+            <input id="message" placeholder="Enter message">
+            <input type="submit" value="Send">
+        </form>
+    </div>
+    
+    <ul id="messages"></ul>
+</body>
+
+</html>
