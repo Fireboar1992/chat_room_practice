@@ -2,14 +2,15 @@
 
 To-Do
 
-DONE Initialize the environment
-Set user name
-Send and receive messages
-Multiple users (5 users)
-Chat one by one
-Adjust UI
+1. Initialize the environment   ---DONE
+2. Set user name
+3. Send and receive messages
+4. Multiple users (5 users)
+5. Chat one by one
+6. Adjust UI
+
 Nce-To-Have
 
-testing
-group message
-db for history
+1. testing
+2. group message
+3. db for history
