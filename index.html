@@ -1,0 +1,36 @@
+<script src="https://cdn.socket.io/3.1.3/socket.io.min.js" integrity="sha384-cPwlPLvBTa3sKAgddT6krw0cJat7egBga3DJepJyrLl4Q9/5WLra3rrnMcyTyOnh" crossorigin="anonymous"></script>
+
+<form onsubmit="return sendMessage();">
+     <input id="message" placeholder="Enter message">
+     <input type="submit" value ="Send">
+</form>
+
+<ul id="messages"></ul>
+
+<script>
+
+    const socket = io('http://localhost:3000');
+ 
+    function sendMessage(){
+        const message = document.getElementById("message");
+        socket.emit('new_message', message.value); 
+        return false;
+    }
+
+    // socket.emit('new_message', 'hello server');
+    // socket.on("new_message", (data)=>{
+    //     console.log(data);
+    //     // console.log('server says', data);
+    // })
+    
+    socket.on('new_message', (data)=>{
+        console.log('server says', data); 
+
+        let li = document.createElement('li');
+        li.innerHTML = data;
+  
+        let messages = document.getElementById('messages');
+        messages.appendChild(li);
+    })
+
+</script>
