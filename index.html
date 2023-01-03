@@ -14,16 +14,26 @@
 <script>
 
     const socket = io('http://localhost:3000');
+    const sender = {};
+    const receiver = {};
 
     function joinRoom() {
         const userName = document.getElementById("user_name");
-        socket.emit('user_join', userName.value);
+        sender.name = userName.value;
+        socket.emit('user_join', {name: userName.value, id: socket.id});
+        return false;
+    }
+
+    function chooseReceiver() {
+        const receiverName = document.getElementById("receiver_name");
+        receiver.name = receiverName.value;
+        socket.emit('receiver_choose', {name: receiverName.value});
         return false;
     }
 
     function sendMessage() {
         const message = document.getElementById("message");
-        socket.emit('new_message', message.value);
+        socket.emit('new_message', {sender: sender.name, receiver: receiver.name, id: socket.id, text: message.value});
 
         let messages = document.createElement('div');
         messages.innerText = message.value;
@@ -39,15 +49,19 @@
     //     // console.log('server says', data);
     // })
 
-    socket.on('new_message', (data) => {
+    socket.on('new_message', (data)=>{
 
         console.log('server says', data);
 
         let messages = document.createElement('div');
-        messages.innerText = data;
+        messages.innerText = `${data.sender}: ${data.text}`;
         const textBox = document.getElementById('text_box');
         textBox.append(messages);
 
+    })
+
+    socket.on('user_name_occupied', (data)=>{
+        alert(data);
     })
 
 </script>
@@ -70,15 +84,31 @@
         padding: 0.5rem;
         overflow: scroll;
     }
-    #user_form {
+    #user_from {
+        margin-left: 1rem;
+    }
+    #user_to {
         margin-left: 1rem;
     }
 </style>
 
 <body>
-    <div id="user_form">
+    <div id="user_from">
+        <div>Sender</div>
         <form onsubmit="return joinRoom();">
             <select id="user_name">
+                <option value="user001">user001</option>
+                <option value="user002">user002</option>
+                <option value="user003">user003</option>
+                <option value="user004">user004</option>
+                <input type="submit" value="Choose">
+            </select>
+        </form>
+    </div>
+    <div id="user_to">
+        <div>Receiver</div>
+        <form onsubmit="return chooseReceiver();">
+            <select id="receiver_name">
                 <option value="user001">user001</option>
                 <option value="user002">user002</option>
                 <option value="user003">user003</option>
